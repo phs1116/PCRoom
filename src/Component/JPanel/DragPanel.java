@@ -99,22 +99,27 @@ public class DragPanel extends JPanel {
 		Point lastPoint = new Point();
 		lastPoint.x = recPoint.x == cPoint.x ? fPoint.x : cPoint.x;
 		lastPoint.y = recPoint.y == cPoint.y ? fPoint.y : cPoint.y;
+		
+		
+		int width = Math.abs(cPoint.x - fPoint.x);
+		int height = Math.abs(cPoint.y - fPoint.y);
+		
 		//화면에 있는 모든 패널 객체이 드래그 화면 안에 있는지 검사.
-		for (int i = 0; i < seatBoard.sPanel.length; i++) {
+		for (int i = 0; i < seatBoard.getsPanel().length; i++) {
 			
-			//패널 오브젝트의 오른쪽 아래 꼭지점 좌표
-			int px = seatBoard.sPanel[i].getLocation().x + seatBoard.sPanel[i].getSize().width - 10;
-			int py = seatBoard.sPanel[i].getLocation().y + seatBoard.sPanel[i].getSize().height - 10;
+			//패널 오브젝트의 꼭지점들의 좌표 (cx,cy) , (cx,py), (px,cy), (px,py)
+			int px = seatBoard.getsPanel()[i].getLocation().x + seatBoard.getsPanel()[i].getSize().width - 10;
+			int py = seatBoard.getsPanel()[i].getLocation().y + seatBoard.getsPanel()[i].getSize().height - 10;
+			int cx = seatBoard.getsPanel()[i].getLocation().x + 10;
+			int cy = seatBoard.getsPanel()[i].getLocation().y + 10;
 
-			//패널 오브젝트의 왼쪽 위 꼭지점 좌표
-			int cx = seatBoard.sPanel[i].getLocation().x + 10;
-			int cy = seatBoard.sPanel[i].getLocation().y + 10;
-
-			//드래그해서 생성된 사각형 내에 꼭지점 두개중 하나라도 들어가있는지를 검사
+			//드래그해서 생성된 사각형 내에 객체의 꼭지점 4개중 하나라도 들어가있는지를 검사
 			if (((px > recPoint.x && py > recPoint.y) && (px < lastPoint.x && py < lastPoint.y))
-					|| ((cx > recPoint.x && cy > recPoint.y) && (cx < lastPoint.x && cy < lastPoint.y))) {
-				seatBoard.sPanel[i].check(true);
-				selectPanels.add(seatBoard.sPanel[i]); // 체크된 패널들을 hashmap에 넣어줌
+					|| ((cx > recPoint.x && cy > recPoint.y) && (cx < lastPoint.x && cy < lastPoint.y))
+					||((px >  recPoint.x && cy < recPoint.y+ height) &&(px <  recPoint.x + width && cy > recPoint.y))
+					 || ((cx <  recPoint.x + width && py > recPoint.y) && (cx >  recPoint.x && py < recPoint.y+ height))) {
+				seatBoard.getsPanel()[i].check(true);
+				selectPanels.add(seatBoard.getsPanel()[i]); // 체크된 패널들을 hashset에 넣어줌
 			}
 		}
 

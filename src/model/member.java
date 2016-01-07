@@ -10,6 +10,13 @@ public class member {
 	
 	
 	
+	public member(String id, String password, String phone, int age) {
+		super();
+		this.id = id;
+		this.password = password;
+		this.phone = phone;
+		this.age = age;
+	}
 	public int getNum() {
 		return num;
 	}

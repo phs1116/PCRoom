@@ -2,6 +2,7 @@ package client;
 
 import java.awt.Dimension;
 import java.awt.Label;
+import java.awt.SecondaryLoop;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,7 +21,17 @@ import DAO.DAO_Login;
 public class ClientLogin extends JFrame {
 	ClientLoginPan loginPan = new ClientLoginPan();
 	ClientBackground background = new ClientBackground();
-	DAO_Login dao_Login = new DAO_Login();
+	DAO_Login dao_Login = null;
+	ClientMain main = null;
+	
+
+	public void setMain(ClientMain main) {
+		this.main = main;
+	}
+
+	public void setDao_Login(DAO_Login dao_Login) {
+		this.dao_Login = dao_Login;
+	}
 
 	public static void main(String[] args) {
 		new ClientLogin();
@@ -31,7 +42,7 @@ public class ClientLogin extends JFrame {
 		// 로그인 프레임 설정
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		Dimension whindowsize = Toolkit.getDefaultToolkit().getScreenSize();
-		Dimension framesize = new Dimension(200, 200);
+		Dimension framesize = new Dimension(200, 170);
 		this.setResizable(false);
 		setSize(framesize);
 		setLocation(whindowsize.width - framesize.width, 0);
@@ -89,6 +100,7 @@ public class ClientLogin extends JFrame {
 			add(join);
 
 		}
+		
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -115,10 +127,16 @@ public class ClientLogin extends JFrame {
 				}
 				if (dao_Login.loginService(id, pass)) {
 					JOptionPane.showMessageDialog(null, "로그인 성공");
+					//로그인 시도.
+					main.tryLogin(id, sNum);
 				} else {
 					JOptionPane.showMessageDialog(null, "로그인 실패");
 				}
 
+			}
+			
+			else if(e.getSource().equals(join)){
+				main.ShowJoin();
 			}
 
 		}

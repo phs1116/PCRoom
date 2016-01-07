@@ -12,15 +12,26 @@ import javax.swing.JPanel;
 import java.lang.reflect.*;
 import Component.JPanel.*;
 import assets.Setting;
+import main.Main;
 
 public class ManageFrame extends JFrame {
-	JLayeredPane layered = this.getLayeredPane();
-	JPanel backGround = new ImgLoad();
-	JPanel ClockImg = new ClockImage();
-	JPanel ClockTxt = new ClockText();
-	JPanel light = new LightObject();
+	private JLayeredPane layered = this.getLayeredPane();
+	private JPanel backGround = new ImgLoad();
+	private JPanel ClockImg = new ClockImage();
+	private JPanel ClockTxt = new ClockText();
+	private JPanel light = new LightObject();
+	private JPanel seatBoard = new SeatBoard();
 
-	JPanel seatBoard = new SeatBoard();
+	//private Main main;
+	
+	public SeatBoard getSeatBoard() {
+		return (SeatBoard)seatBoard;
+	}
+
+	public void setMain(Main main) {
+	//	this.main = main;
+	}
+
 	public static void main(String[] args) {
 		ManageFrame manageView = new ManageFrame();
 		try {
@@ -104,17 +115,4 @@ public class ManageFrame extends JFrame {
 			i++;
 		}
 	}
-
-	/*
-	public void ExitProcess(JFrame component) {
-		component.addWindowListener(new WindowAdapter() { // x버튼 클릭시 이벤트 등록
-			@Override
-			public void windowClosing(WindowEvent e) {
-				e.getWindow().setVisible(false);
-				e.getWindow().dispose();
-				System.exit(0);
-			}
-		});
-	}
-*/
 }

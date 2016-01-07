@@ -9,7 +9,7 @@ public class ClientBackground {
 	private Socket socket = null;
 	private DataInputStream dis = null;
 	private DataOutputStream dos = null;
-	ClientLogin cLogin = null;
+	ClientMain cMain = null;
 	
 	
 	
@@ -21,9 +21,13 @@ public class ClientBackground {
 		cb.connect();
 	}
 
-	public void setcLogin(ClientLogin cLogin) {
-		this.cLogin = cLogin;
+
+
+	public void setcMain(ClientMain cMain) {
+		this.cMain = cMain;
 	}
+
+
 
 	public void connect() {
 		try {
@@ -32,8 +36,6 @@ public class ClientBackground {
 			dis = new DataInputStream(socket.getInputStream());
 			dos = new DataOutputStream(socket.getOutputStream());
 			System.out.println("서버 연결 성공");
-			dos.writeUTF(nickname);
-			sendMsg(nickname + "님이 입장하셨습니다.\n");
 			while (dis != null) {
 				msg = dis.readUTF();
 				// cGui.receiveMsg(msg);
@@ -47,6 +49,17 @@ public class ClientBackground {
 	public void sendMsg(String msg) {
 		try {
 			dos.writeUTF(msg);
+
+		} catch (IOException e) {
+			e.printStackTrace();
+			// sendMsg(nickname +"님이 퇴장하셨습니다.");
+		}
+	}
+	
+	public void sendLogin(String id, int seatNum) {
+		try {
+			dos.writeUTF(id);
+			dos.writeUTF(seatNum+"");
 
 		} catch (IOException e) {
 			e.printStackTrace();

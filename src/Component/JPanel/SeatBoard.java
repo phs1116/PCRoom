@@ -1,19 +1,18 @@
 package Component.JPanel;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Point;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
 
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
-import javax.swing.tree.FixedHeightLayoutCache;
 
 public class SeatBoard extends JPanel {
-	SeatPanel[] sPanel = new SeatPanel[50]; // 좌석들을 위한 패널
-	DragPanel dragPanel = new DragPanel();
+	private SeatPanel[] sPanel = new SeatPanel[50]; // 좌석들을 위한 패널
+	private DragPanel dragPanel = new DragPanel();
+	
+	
+	public SeatPanel[] getsPanel() {
+		return sPanel;
+	}
+
 	public SeatBoard() {
 		JLayeredPane board = new JLayeredPane();
 		board.setLayout(null);
@@ -49,5 +48,8 @@ public class SeatBoard extends JPanel {
 		}
 	}
 
-
+	public void setOn(int seatNum, String id){
+		System.out.println("좌석번호: "+seatNum);
+		sPanel[seatNum].setOnOff(true,id);
+	}
 }

@@ -47,7 +47,7 @@ public class SeatPanel extends JPanel {
 		panImg.setLocation(0, 0);
 		panImg.setSize(99, 99);
 		panImg.setOpaque(false);
-		setOnOff(false); // 배경 이미지 설정
+		setOnOff(false,""); // 배경 이미지 설정
 
 		// 체크 패널 등록
 		CheckPanel panCheck = new CheckPanel();
@@ -88,7 +88,7 @@ public class SeatPanel extends JPanel {
 		}
 	}
 
-	public void setOnOff(boolean set) {
+	public void setOnOff(boolean set, String id) {
 
 		try {
 			if (set == true) {
@@ -96,11 +96,17 @@ public class SeatPanel extends JPanel {
 
 				labels[0].setText(seatNum + 1 + ". 사용중");
 				labels[0].setForeground(Color.red);
+				labels[1].setText(id);
+				labels[1].setForeground(new Color(36, 205, 198));
+				labels[2].setText("시간 :");
+				labels[2].setForeground(new Color(36, 205, 198));
 			} else if (set == false) {
 				image = ImageIO.read(new File("img/gameOff.png"));
 
 				labels[0].setText(seatNum + 1 + ". 빈자리");
 				labels[0].setForeground(new Color(36, 205, 198));
+				labels[1].setText("");
+				labels[2].setText("");
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -168,9 +174,9 @@ public class SeatPanel extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getActionCommand().equals("실행"))
-				setOnOff(true);
+				setOnOff(true,"관리자");
 			else if (e.getActionCommand().equals("종료"))
-				setOnOff(false);
+				setOnOff(false,"관리자");
 		}
 
 	}
