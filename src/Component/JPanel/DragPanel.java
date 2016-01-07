@@ -17,7 +17,7 @@ public class DragPanel extends JPanel {
 	Point fPoint = new Point();
 	Point curPoint = new Point();
 	boolean isDrag = false;
-	HashSet<SeatPanel> seatPanels = new HashSet<>();
+	HashSet<SeatPanel> selectPanels = new HashSet<>();
 
 	public void setSeatBoard(SeatBoard seatBoard) {
 		this.seatBoard = seatBoard;
@@ -84,67 +84,44 @@ public class DragPanel extends JPanel {
 			int width = Math.abs(curPoint.x - fPoint.x);
 			int height = Math.abs(curPoint.y - fPoint.y);
 			g.drawRect(recPoint.x, recPoint.y, width, height);
+
+			System.out.println(recPoint);
 		}
 
 	}
 
 	public void searchCheck(Point fPoint, Point cPoint) {
-
 		allCheckOff();
-		// 아무대도속하지 않았을 경우를 대비해 -1로 초기화
-		int ix = -1, jx = -1;
-		int iy = -1, jy = -1;
-
-		int pX, cX, pY, cY;
-
-		// X좌표 양끝 설정
-		pX = fPoint.x < curPoint.x ? fPoint.x : curPoint.x;
-		cX = pX == fPoint.x ? curPoint.x : fPoint.x;
-		pX = pX < 0 ? 1 : pX;
-		cX = cX > 1350 ? 1349 : cX;
-
+		Point recPoint = new Point();
+		recPoint.x = cPoint.x < fPoint.x ? cPoint.x : fPoint.x;
+		recPoint.y = cPoint.y < fPoint.y ? cPoint.y : fPoint.y;
 		
-		// Y좌표 양 끝 설정
-		pY = fPoint.y < curPoint.y ? fPoint.y : curPoint.y;
-		cY = pY == fPoint.y ? curPoint.y : fPoint.y;
-		cY = cY > 725 ? 724 : cY;
-		pY = pY < 0 ? 1 : pY;
+		Point lastPoint = new Point();
+		lastPoint.x = recPoint.x == cPoint.x ? fPoint.x : cPoint.x;
+		lastPoint.y = recPoint.y == cPoint.y ? fPoint.y : cPoint.y;
+		//화면에 있는 모든 패널 객체이 드래그 화면 안에 있는지 검사.
+		for (int i = 0; i < seatBoard.sPanel.length; i++) {
+			
+			//패널 오브젝트의 오른쪽 아래 꼭지점 좌표
+			int px = seatBoard.sPanel[i].getLocation().x + seatBoard.sPanel[i].getSize().width - 10;
+			int py = seatBoard.sPanel[i].getLocation().y + seatBoard.sPanel[i].getSize().height - 10;
 
-		// x축에 속한 배열들 계산
-		if (pX % 135 < 80) {
-			ix = pX / 135;
-		} else if ((pX % 135 > 99) && (pX / 135 != cX / 135)) {
-			ix = (pX / 135) + 1;
-		}
-		jx = cX / 135;
+			//패널 오브젝트의 왼쪽 위 꼭지점 좌표
+			int cx = seatBoard.sPanel[i].getLocation().x + 10;
+			int cy = seatBoard.sPanel[i].getLocation().y + 10;
 
-		// y축에 속한 배열들 계산
-		if (pY % 145 < 80) {
-			iy = pY / 145;
-		} else if ((pY % 145 > 99) && (pY / 145 != cY / 145)) {
-			iy = (pY / 145) + 1;
-		}
-		jy = cY / 145;
-
-		// 드래그 사각형 내부에 있는 객체들을 모두 checkOn으로 변경
-		if (ix != -1 && iy != -1) {
-			for (int i = ix; i <= jx; i++) {
-				for (int j = iy; j <= jy; j++) {
-					seatBoard.sPanel[j * 10 + i].check(true);
-					seatPanels.add(seatBoard.sPanel[j * 10 + i]);
-					//체크된 패널들을 HashSet에 넣어줌.
-				}
+			//드래그해서 생성된 사각형 내에 꼭지점 두개중 하나라도 들어가있는지를 검사
+			if (((px > recPoint.x && py > recPoint.y) && (px < lastPoint.x && py < lastPoint.y))
+					|| ((cx > recPoint.x && cy > recPoint.y) && (cx < lastPoint.x && cy < lastPoint.y))) {
+				seatBoard.sPanel[i].check(true);
+				selectPanels.add(seatBoard.sPanel[i]); // 체크된 패널들을 hashmap에 넣어줌
 			}
-
-			System.out.println(seatPanels);
 		}
-		System.out.println("ix,jx = (" + ix + "," + jx + ")");
-		System.out.println("iy,jy = (" + iy + "," + jy + ")");
-	}
 
+	}
 	public void allCheckOff() {
-		//HashSet에 들어간 모든 변수들의 체크를 헤제
-		Iterator<SeatPanel> it = seatPanels.iterator();
+		// HashSet에 들어간 모든 변수들의 체크를 헤제
+		Iterator<SeatPanel> it = selectPanels.iterator();
 		while (it.hasNext()) {
 			it.next().check(false);
 			it.remove();
