@@ -39,6 +39,7 @@ public class ClientLogin extends JFrame {
 
 	public ClientLogin() {
 
+		
 		// 로그인 프레임 설정
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		Dimension whindowsize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -48,13 +49,20 @@ public class ClientLogin extends JFrame {
 		setLocation(whindowsize.width - framesize.width, 0);
 
 		// loginPan.setBounds(0,0,200,100);
+		loginPan.setOuter(this);
 		loginPan.setOpaque(false);
 
 		add(loginPan);
 		setVisible(true);
 	}
+	
+	public void UsingMessage(){
+		JOptionPane.showMessageDialog(null, "사용중인 좌석이거나 ID이어서 계속 할 수 없습니다.");
+	}
 
 	class ClientLoginPan extends JPanel implements ActionListener {
+		JFrame Outer;
+		
 		JLabel id = new JLabel("아이디");
 		JLabel pass = new JLabel("비밀번호");
 		JLabel seatNum = new JLabel("좌석번호");
@@ -65,6 +73,9 @@ public class ClientLogin extends JFrame {
 		JButton login = new JButton("로그인");
 		JButton join = new JButton("회원가입");
 
+		public void setOuter(JFrame frame){
+			Outer = frame;
+		}
 		public ClientLoginPan() {
 			// setSize(200,100);
 
@@ -126,9 +137,9 @@ public class ClientLogin extends JFrame {
 					return;
 				}
 				if (dao_Login.loginService(id, pass)) {
-					JOptionPane.showMessageDialog(null, "로그인 성공");
+					//JOptionPane.showMessageDialog(null, "로그인 성공");
 					//로그인 시도.
-					main.tryLogin(id, sNum);
+					main.tryLogin(id, sNum-1);
 				} else {
 					JOptionPane.showMessageDialog(null, "로그인 실패");
 				}
@@ -136,7 +147,7 @@ public class ClientLogin extends JFrame {
 			}
 			
 			else if(e.getSource().equals(join)){
-				main.ShowJoin();
+				main.ShowJoin(Outer);
 			}
 
 		}

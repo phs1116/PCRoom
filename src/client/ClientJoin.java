@@ -46,7 +46,8 @@ public class ClientJoin extends JFrame {
 		this.setResizable(false);
 		setSize(framesize);
 		setLocation(whindowsize.width - framesize.width, 0);
-
+		
+		joinPan.setOuter(this);
 		joinPan.setBounds(0, 0, 400, 400);
 		joinPan.setOpaque(false);
 
@@ -55,6 +56,7 @@ public class ClientJoin extends JFrame {
 	}
 
 	class ClientJoinPan extends JPanel implements ActionListener {
+		JFrame Outer;
 		JLabel id = new JLabel("아이디");
 		JLabel pass = new JLabel("비밀번호");
 		JLabel phoneNum = new JLabel("전화번호");
@@ -67,6 +69,10 @@ public class ClientJoin extends JFrame {
 		JButton joinOk = new JButton("확인");
 		JButton joinCancel = new JButton("취소");
 
+		public void setOuter(JFrame frame){
+			Outer = frame;
+		}
+		
 		public ClientJoinPan() {
 			// setSize(200,100);
 
@@ -135,14 +141,14 @@ public class ClientJoin extends JFrame {
 
 				if (dao_Join.joinService(jMember)) {
 					JOptionPane.showMessageDialog(null, "회원가입 성공");
-					cMain.ShowLogin();
+					cMain.ShowLogin(Outer);
 				} else {
 					JOptionPane.showMessageDialog(null, "회원가입 실패");
 				}
 			}
 			
 			else if(e.getSource().equals(joinCancel)){
-				cMain.ShowLogin();
+				cMain.ShowLogin(Outer);
 			}
 
 		}

@@ -22,14 +22,14 @@ public class ManageFrame extends JFrame {
 	private JPanel light = new LightObject();
 	private JPanel seatBoard = new SeatBoard();
 
-	//private Main main;
-	
+	// private Main main;
+
 	public SeatBoard getSeatBoard() {
-		return (SeatBoard)seatBoard;
+		return (SeatBoard) seatBoard;
 	}
 
 	public void setMain(Main main) {
-	//	this.main = main;
+		// this.main = main;
 	}
 
 	public static void main(String[] args) {
@@ -43,9 +43,7 @@ public class ManageFrame extends JFrame {
 
 	public ManageFrame() {
 
-
-
-		//ExitProcess(this);
+		// ExitProcess(this);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		// 메인 프레임 설정
 		setSize(Setting.fscreenSize);
@@ -73,9 +71,9 @@ public class ManageFrame extends JFrame {
 		Field[] fields = clazz.getDeclaredFields();
 		// clazz가 표현한 모든 필드들을 반환한다.필드는 클래스,인터페이스가 가지고있는 정보들을 저장한다.
 		for (Field field : fields) {
-			System.out.println(field.getName());
+			// System.out.println(field.getName());
 
-			System.out.println(targetClass.getDeclaredField(field.getName()).get(target));
+			// System.out.println(targetClass.getDeclaredField(field.getName()).get(target));
 			// 타겟 클래스의 해당 이름값으 필드값을
 			// 가져오고(targetClass.getDeclaredField(field.getName())), 그 필드가
 			// 표현하는 필드의 값을 Object클 가져온다.(.get(target))

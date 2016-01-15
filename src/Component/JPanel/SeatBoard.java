@@ -4,11 +4,21 @@ package Component.JPanel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 
+import main.Main;
+
 public class SeatBoard extends JPanel {
 	private SeatPanel[] sPanel = new SeatPanel[50]; // 좌석들을 위한 패널
 	private DragPanel dragPanel = new DragPanel();
+	private Main main;
 	
-	
+	public Main getMain() {
+		return main;
+	}
+
+	public void setMain(Main main) {
+		this.main = main;
+	}
+
 	public SeatPanel[] getsPanel() {
 		return sPanel;
 	}
@@ -43,6 +53,7 @@ public class SeatBoard extends JPanel {
 			}
 			sPanel[i] = new SeatPanel(i);
 			sPanel[i].setBounds(psPosX, psPosY, 99, 99);
+			sPanel[i].setSeatBoard(this);
 			psPosX += 135;
 			add(sPanel[i]);
 		}
@@ -52,4 +63,17 @@ public class SeatBoard extends JPanel {
 		System.out.println("좌석번호: "+seatNum);
 		sPanel[seatNum].setOnOff(true,id);
 	}
+	
+	public void setOff(int seatNum,String id){
+	
+	}
+	
+	public void addSelect(SeatPanel select){
+		dragPanel.addSelect(select);
+	}
+	
+	public void removeSelect(SeatPanel select){
+		dragPanel.removeSelect(select);
+	}
+	
 }

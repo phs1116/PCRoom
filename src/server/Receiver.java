@@ -4,8 +4,12 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.BlockingDeque;
+
+import org.omg.PortableInterceptor.DISCARDING;
 
 public class Receiver extends Thread {
 	Socket socket;
@@ -25,15 +29,13 @@ public class Receiver extends Thread {
 
 // 관리자 리시버
 class AdminReceiver extends Receiver {
-	Map<String, String> Users = new HashMap<>();
 
 	public AdminReceiver(Socket sock) {
 		super(sock);
 	}
-	
 
 	public void addUser(String seatNum, String id) {
-		Users.put(seatNum, id);
+		// Users.put(seatNum, id);
 		try {
 			output.writeUTF(seatNum);
 			output.writeUTF(id);
@@ -42,7 +44,7 @@ class AdminReceiver extends Receiver {
 	}
 
 	public void removeUser(String seatNum) {
-		Users.remove(seatNum);
+		// Users.remove(seatNum);
 	}
 
 }
@@ -55,5 +57,21 @@ class UserReceiver extends Receiver {
 		super(sock);
 		seatNum = Integer.parseInt(sNum);
 	}
+
+	@Override
+	public void run() {
+		while (input != null) {
+			try {
+				
+				sendMassage(input.readUTF());
+			} catch (IOException e) {
+			}
+
+		}
+		
+	}
+	
+	void sendMassage(String msg){}
+	
 
 }

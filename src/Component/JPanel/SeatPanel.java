@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.InputEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -20,15 +21,27 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 
+import main.Background;
+import main.Main;
+import model.ClientUserState;
+import veiw.ServerChat;
+
 public class SeatPanel extends JPanel {
 	int seatNum;
+	ClientUserState user;
 	BufferedImage image;
 	Image checkimg;
 	Image drawCh = null;
 	JPanel panText = new JPanel();
 	JLabel[] labels = new JLabel[4];
 
+	SeatBoard seatBoard;
+	ServerChat serverChat;
 	boolean check = false;
+
+	public void setSeatBoard(SeatBoard seatBoard) {
+		this.seatBoard = seatBoard;
+	}
 
 	public SeatPanel(int seatNum) {
 		// 자리 번호 초기화
@@ -47,7 +60,7 @@ public class SeatPanel extends JPanel {
 		panImg.setLocation(0, 0);
 		panImg.setSize(99, 99);
 		panImg.setOpaque(false);
-		setOnOff(false,""); // 배경 이미지 설정
+		setOnOff(false, ""); // 배경 이미지 설정
 
 		// 체크 패널 등록
 		CheckPanel panCheck = new CheckPanel();
@@ -92,15 +105,27 @@ public class SeatPanel extends JPanel {
 
 		try {
 			if (set == true) {
+				if (!id.equals("관리자")) {
+					user = new ClientUserState(id, seatNum + "");
+					labels[1].setForeground(new Color(36, 205, 198));
+					user.setTimelb(labels[2]);
+					labels[2].setForeground(new Color(36, 205, 198));
+					user.setCreditlb(labels[3]);
+					labels[2].setForeground(new Color(36, 205, 198));
+				}
 				image = ImageIO.read(new File("img/gameOn.png"));
-
+				new Thread(user).start();
 				labels[0].setText(seatNum + 1 + ". 사용중");
 				labels[0].setForeground(Color.red);
 				labels[1].setText(id);
-				labels[1].setForeground(new Color(36, 205, 198));
-				labels[2].setText("시간 :");
-				labels[2].setForeground(new Color(36, 205, 198));
+
 			} else if (set == false) {
+				if (user != null) {
+					seatBoard.getMain().setOffSeat((seatNum + 1) + "");
+					user.setRun(false);
+					user = null;
+
+				}
 				image = ImageIO.read(new File("img/gameOff.png"));
 
 				labels[0].setText(seatNum + 1 + ". 빈자리");
@@ -155,9 +180,22 @@ public class SeatPanel extends JPanel {
 		}
 
 		public void mouseClicked(java.awt.event.MouseEvent e) {
+			int LEFT_CTRL_MASK = InputEvent.BUTTON1_MASK + InputEvent.CTRL_MASK;
+
 			super.mouseClicked(e);
 			if (e.getButton() == 3)
 				pMenu.show((SeatPanel) e.getSource(), e.getX(), e.getY());
+			else if ((e.getModifiers() & LEFT_CTRL_MASK) == LEFT_CTRL_MASK) {
+				System.out.println("컨트롤+마우스");
+				if (check == false) {
+					seatBoard.addSelect((SeatPanel) e.getSource());
+					check(true);
+				} else {
+					seatBoard.removeSelect((SeatPanel) e.getSource());
+					check(false);
+				}
+
+			}
 		}
 
 		public void initPopupMenu() {
@@ -165,18 +203,23 @@ public class SeatPanel extends JPanel {
 			run.addActionListener(this);
 			JMenuItem off = new JMenuItem("종료");
 			off.addActionListener(this);
+			JMenuItem chat = new JMenuItem("채팅");
+			chat.addActionListener(this);
 			pMenu.add(run);
 			pMenu.add(off);
 			pMenu.add(new JMenuItem("정산"));
-			pMenu.add(new JMenuItem("채팅"));
+			pMenu.add(chat);
 		}
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getActionCommand().equals("실행"))
-				setOnOff(true,"관리자");
+				setOnOff(true, "관리자");
 			else if (e.getActionCommand().equals("종료"))
-				setOnOff(false,"관리자");
+				setOnOff(false, "관리자");
+			else if(e.getActionCommand().equals("채팅")){
+				serverChat = new ServerChat(seatNum);
+			}
 		}
 
 	}

@@ -47,7 +47,7 @@ public class DBConnectionMgr {
 */
     
     private String _driver = "org.h2.Driver",
-    	    _url = "jdbc:h2:mem:test",
+    	    _url = "jdbc:h2:tcp://localhost/~/test",
     	    _user = "root",
     	    _password = "1234";
 

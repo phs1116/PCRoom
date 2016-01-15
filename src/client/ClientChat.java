@@ -1,44 +1,45 @@
-package chat.server;
+package client;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-public class ServerGUI extends JFrame implements ActionListener {
-	ServerBackground server = new ServerBackground();
+import chat.server.ServerGUI;
 
-	JTextArea chatArea = null;
-	JTextField chatField = null;
-
+public class ClientChat extends JFrame implements ActionListener {
+	private JTextArea chatArea = null;
+	private JTextField chatField = null;
+	private ClientBackground client = ClientBackground.getInstance();
+	//private String seatNum = null;
+	
 	public static void main(String[] args) {
-		//SeatGUI seatGUI = new SeatGUI();
-		ServerGUI sg= new ServerGUI();
-		//sg.server.setSeatGUI(seatGUI);
-		sg.server.ServerSet();
 		
+		//new ClientChat();
 	}
 
-	public ServerGUI() {
+	public ClientChat() {
 		
-		server.setGUI(this);
-	
-		
+		//this.seatNum = seatNum;
 		//setDefaultCloseOperation(EXIT_ON_CLOSE);
-		
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				e.getWindow().setVisible(false);;
+				client.setChat(null);
+				e.getWindow().setVisible(false);
 				e.getWindow().dispose();
 				System.exit(0);
 			}
 		});
-		setBounds(200, 100, 300, 300);
-		setTitle("Chat Server");
+		
+		client.setChat(this);
+		setBounds(200, 100, 400, 600);
+		setTitle("Chat Client");
 
 		chatArea = new JTextArea(40, 25);
 		chatArea.setEditable(false);
@@ -47,27 +48,25 @@ public class ServerGUI extends JFrame implements ActionListener {
 		chatField = new JTextField(25);
 		chatField.addActionListener(this);
 		add(chatField, "South");
+
+	
 		
 		setVisible(true);
-		//server.ServerSet();
+		
 	}
-	
-	
 	
 	public void receiveMsg(String msg){
 		chatArea.append(msg);
 	}
-	
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String msg = chatField.getText() + "\n";
-		
-		chatArea.append("★관리자>>> "+msg);
-		server.sendMessage("★관리자>>> "+msg);
-		if(chatField.getText().equals("showlist")){
-			server.showlist();
-		}
+		//chatArea.append(msg);
+		client.sendMsg(msg);
 		chatField.setText("");
 	}
+
+	
 
 }

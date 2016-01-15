@@ -1,32 +1,34 @@
-package chat.server;
+package veiw;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-public class ServerGUI extends JFrame implements ActionListener {
-	ServerBackground server = new ServerBackground();
+import main.Background;
+import main.Main;
 
+public class ServerChat extends JFrame implements ActionListener {
+	Background server = Background.getInstance();
+	String seatNum = null;
 	JTextArea chatArea = null;
 	JTextField chatField = null;
+	
+	
 
 	public static void main(String[] args) {
 		//SeatGUI seatGUI = new SeatGUI();
-		ServerGUI sg= new ServerGUI();
+		//ServerChat sg= new ServerChat();
 		//sg.server.setSeatGUI(seatGUI);
-		sg.server.ServerSet();
-		
 	}
 
-	public ServerGUI() {
-		
-		server.setGUI(this);
-	
-		
+	public ServerChat(int seatNum) {
+			
+		this.seatNum = seatNum+"";
 		//setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
 		addWindowListener(new WindowAdapter() {
@@ -34,7 +36,6 @@ public class ServerGUI extends JFrame implements ActionListener {
 			public void windowClosing(WindowEvent e) {
 				e.getWindow().setVisible(false);;
 				e.getWindow().dispose();
-				System.exit(0);
 			}
 		});
 		setBounds(200, 100, 300, 300);
@@ -63,10 +64,10 @@ public class ServerGUI extends JFrame implements ActionListener {
 		String msg = chatField.getText() + "\n";
 		
 		chatArea.append("★관리자>>> "+msg);
-		server.sendMessage("★관리자>>> "+msg);
-		if(chatField.getText().equals("showlist")){
-			server.showlist();
-		}
+		server.sendMessage("★관리자>>> "+msg, this.seatNum);
+	//	if(chatField.getText().equals("showlist")){
+		//	server.showlist();
+	//	}
 		chatField.setText("");
 	}
 
